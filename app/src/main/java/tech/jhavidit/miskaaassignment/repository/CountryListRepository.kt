@@ -8,17 +8,24 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import tech.jhavidit.miskaaassignment.model.CountryItem
+import tech.jhavidit.miskaaassignment.model.CountryItemLocal
 import tech.jhavidit.miskaaassignment.network.APIClient
+import tech.jhavidit.miskaaassignment.room.CountryDao
 
 
-class CountryListRepository(val application: Application) {
+class CountryListRepository(val application: Application, val countryDao: CountryDao) {
     val showCountryList = MutableLiveData<List<CountryItem>>()
     val showProgress = MutableLiveData<Boolean>()
-    //val readAllData :LiveData<List<CountryItem>> = countryDao.getCountry()
-//    suspend fun addCountry(countryItem: List<CountryItem>)
-//    {
-//        countryDao.insertCountry(countryItem)
-//    }
+
+    val readAllData: LiveData<List<CountryItemLocal>> = countryDao.getCountry()
+    suspend fun addCountry(countryItemLocal: CountryItemLocal) {
+        countryDao.insertCountry(countryItemLocal)
+    }
+
+    suspend fun deleteAllCountry() {
+        countryDao.deleteAllCountries()
+    }
+
     fun getCountryList() {
         val retrofitService = APIClient.getClient(application)
         showProgress.value = true

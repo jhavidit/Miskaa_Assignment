@@ -7,30 +7,38 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tech.jhavidit.miskaaassignment.model.CountryItem
+import tech.jhavidit.miskaaassignment.model.CountryItemLocal
 import tech.jhavidit.miskaaassignment.repository.CountryListRepository
+import tech.jhavidit.miskaaassignment.room.CountryDatabase
 
 
 class CountryListViewModel(application: Application) : AndroidViewModel(application) {
     val showCountryDetails: LiveData<List<CountryItem>>
     val showProgress: LiveData<Boolean>
-  //  val readAllData: LiveData<List<CountryItem>>
-    private val repository = CountryListRepository(application)
+    val readAllData: LiveData<List<CountryItemLocal>>
+    private val repository : CountryListRepository
 
     init {
 
-      //  val countryDao = Country.getDatabase(application).countryDao()
-
+        val countryDao = CountryDatabase.getDatabase(application).countryDao()
+        repository = CountryListRepository(application, countryDao)
         this.showProgress = repository.showProgress
         this.showCountryDetails = repository.showCountryList
+        readAllData = repository.readAllData
 
     }
 
-//    fun addCountryData(countryItem: List<CountryItem>)
-//    {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            repository.addCountry(countryItem)
-//        }
-//    }
+    fun addCountryData(countryItemLocal: CountryItemLocal)
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addCountry(countryItemLocal)
+        }
+    }
+    fun deleteAllCountry(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllCountry()
+        }
+    }
 
     fun getCountryList() {
         repository.getCountryList()
