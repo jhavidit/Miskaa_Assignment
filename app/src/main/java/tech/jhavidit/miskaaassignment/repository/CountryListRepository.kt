@@ -13,11 +13,12 @@ import tech.jhavidit.miskaaassignment.network.APIClient
 import tech.jhavidit.miskaaassignment.room.CountryDao
 
 
-class CountryListRepository(val application: Application, val countryDao: CountryDao) {
+class CountryListRepository(private val application: Application, val countryDao: CountryDao) {
     val showCountryList = MutableLiveData<List<CountryItem>>()
     val showProgress = MutableLiveData<Boolean>()
 
     val readAllData: LiveData<List<CountryItemLocal>> = countryDao.getCountry()
+
     suspend fun addCountry(countryItemLocal: CountryItemLocal) {
         countryDao.insertCountry(countryItemLocal)
     }

@@ -88,7 +88,7 @@ class HomeActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun deleteAllUSers() {
+    private fun deleteAllUSers() {
         val builder = AlertDialog.Builder(this)
         builder.setPositiveButton("Yes") { _, _ ->
             viewModel.deleteAllCountry()
